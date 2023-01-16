@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="./src/helpers/handleLocalStorage.js" defer></script>
+  <script src="./src/helpers/handleInputs.js" defer></script>
+  <script src="./src/Buttons.js" defer></script>
+  <script src="./src/TasksList.js" defer></script>
+  <script src="script.js" defer></script>
+  <title>To do List</title>
+</head>
+<body>
+  <header>
+    <h1>To do List</h1>
+    <p id="funcionamento">Clique duas vezes em um item para marcá-lo como completo.</p>
+    <input id="add-task" type="text">
+    <button id="criar-tarefa">Criar Tarefa</button>
+  </header>
+  <main>
+    <ol id="tasks-list"></ol>
+  </main>
+  <section>
+    <button id="del-all" onclick="clearAllTasksBtn()">Apagar Tudo</button>
+    <button id="del-all" onclick="clearCompletedTasksBtn()">Apagar tarefas completas</button>
+    <button id="save-tasks" onclick="saveTasksBtn()">Salvar tarefas</button>
+    <button id="move-up" onclick="moveTaskBtns()">Mover pra cima</button>
+    <button id="move-down" onclick="moveTaskBtns()">Mover pra baixo</button>
+    <button id="del-selected" onclick="clearSelectedBtn()">Apagar tarefa selecionada</button>
+  </section>
+</body>
+</html>
