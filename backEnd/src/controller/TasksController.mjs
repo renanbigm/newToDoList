@@ -8,16 +8,18 @@ const create = (req, res) => {
         buffer += chunk;
       });
 
-      req.on('end', (chunk) => {
-        if (chunk) {
-          buffer += chunk;
-        }
-        res.writeHead(200, 'ok');
-        res.write(buffer);
+    req.on('end', (chunk) => {
+      if (chunk) {
+        buffer += chunk;
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
+      res.writeHead(200, 'ok');
+      res.write(buffer);
 
-        res.end('its done');
-        // resolve();
-      });
+      res.end('its done');
+      // resolve();
+    });
     
   // });
 }

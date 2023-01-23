@@ -4,7 +4,7 @@ import tasksRouter from './src/router/tasksRouter.mjs';
 // const util = require('util'); // object to string;
 // const { StringDecoder } = require('string_decoder');
 
-const port = 3335;
+export const port = 3335;
 const server = http.createServer();
 
 server.on('request', (req, res) => {
@@ -14,6 +14,7 @@ server.on('request', (req, res) => {
   }
 
   res.status = 404;
+  console.log('erro');
   res.end("Route not Found");
 });
 

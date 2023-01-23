@@ -16,6 +16,9 @@ const tasksRouter = (req, res) => {
     case 'DELETE':
       console.log('delete');
       break;
+    case 'OPTIONS':
+      options(req, res);
+      break;
     default:
       break;
   }
