@@ -1,14 +1,17 @@
-import create from "../controller/TasksController.mjs";
+import { create, findAll, options } from "../controller/TasksController.mjs";
 
 const tasksRouter = (req, res) => {
-  console.log(req.url, req.method, req.headers, req.body);
+  console.log('URL ->', req.url);
+  console.log('METHOD ->', req.method);
+  console.log('BODY ->', req.body);
+  console.log('HEADERS ->', req.headers);
 
   switch (req.method) {
     case 'POST':
       create(req, res);
       break;
     case 'GET':
-      console.log('get');
+      findAll(req, res);
       break;
     case 'PUT':
       console.log('put');

@@ -8,14 +8,13 @@ export const port = 3335;
 const server = http.createServer();
 
 server.on('request', (req, res) => {
-  console.log(req.url)
+  console.log('URL in server --->', req.url)
   if (req.url.includes('/tasks')) {
     tasksRouter(req, res);
   }
 
   res.status = 404;
-  console.log('erro');
-  res.end("Route not Found");
+  res.end();
 });
 
 server.listen(port, () => {

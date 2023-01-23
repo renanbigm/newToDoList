@@ -1,30 +1,45 @@
 // import server from "../../server.mjs";
 
-const create = (req, res) => {
+export const create = async (req, res) => {
   // return new Promise((resolve, reject) => {
+    console.log('entrei em create')
     let buffer = '';
     
     req.on('data', (chunk) => {
         buffer += chunk;
       });
 
-    req.on('end', (chunk) => {
+    await req.on('end', (chunk) => {
       if (chunk) {
         buffer += chunk;
       }
+      // res.writeHead(200, 'ok');
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
-      res.writeHead(200, 'ok');
       res.write(buffer);
 
-      res.end('its done');
+      res.end();
       // resolve();
     });
     
   // });
 }
 
-export default create;
+export const findAll = (_req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
+  res.end('chamou get');
+}
+
+export const options = (_req, res) => {
+  res.statusCode = 204;
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', 86400);
+  res.end();
+};
 
 // server.on('request', (req, res) => {
   // console.log(http.METHODS);
