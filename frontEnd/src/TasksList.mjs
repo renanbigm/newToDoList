@@ -1,7 +1,6 @@
-import { port } from "../../backEnd/server.mjs";
 import { loadFromLocalStorage } from "./helpers/handleLocalStorage.mjs";
 
-export function createTasksList(text) {
+export async function createTasksList(text) {
   const ol = document.querySelector('#tasks-list');
   const li = document.createElement('li');
  
@@ -38,18 +37,16 @@ export function loadTaskList() {
   }
 }
 
-// async function sendTasktoBE(task) {
-//   const info = {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     method: 'POST',
-//     body: JSON.stringify({ task }),
-//   };
+async function sendTasktoBE(task) {
+  console.log(JSON.stringify({ task: task.innerHTML }));
+  const info = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({ task: task.innerHTML }),
+  };
 
-  // const taskFetch = await fetch(`http://localhost:${port}/tasks`, info);
-  // console.log(taskFetch);
-  // const sendTask = await taskFetch((res) => res.json());
-
-  // return sendTask;
-// }
+  const response = await fetch(`http://localhost:3336/tasks`, info).then((res) => res.json());
+  createTasksList(response.task);
+}

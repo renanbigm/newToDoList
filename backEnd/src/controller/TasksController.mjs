@@ -1,29 +1,26 @@
-// import server from "../../server.mjs";
+import { createTask } from "../service/tasksService.mjs";
 
-export const create = async (req, res) => {
-  // return new Promise((resolve, reject) => {
-    console.log('entrei em create')
-    let buffer = '';
-    
+export const create = async (req, res) => {    
+  let buffer = '';
+  return new Promise((resolve, _reject) => {
     req.on('data', (chunk) => {
         buffer += chunk;
       });
-
-    await req.on('end', (chunk) => {
+    req.on('end', (chunk) => {
       if (chunk) {
         buffer += chunk;
       }
-      // res.writeHead(200, 'ok');
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
-      res.write(buffer);
-
-      res.end();
-      // resolve();
+      createTask(JSON.parse(buffer)).then(() => {
+        res.statusCode = 201;
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
+        res.write(JSON.stringify(buffer));
+        res.end();
+        resolve();
+      });
     });
-    
-  // });
-}
+  });
+};
 
 export const findAll = (_req, res) => {
   res.statusCode = 200;

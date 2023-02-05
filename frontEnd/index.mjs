@@ -9,12 +9,11 @@ import { addListenerToClearAll,
 import { loadTaskList } from "./src/TasksList.mjs";
 
 window.onload = () => {
-  loadTaskList();
+  // loadTaskList();
   createTaskBtn();
   addListenerToClearAll();
   addListenerToClearCompletedTasks();
   addListenerToSaveTasks();
   addListenerToMoveBtns();
   addListenerToClearSelectetds();
-
 }

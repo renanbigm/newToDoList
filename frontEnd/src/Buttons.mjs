@@ -5,7 +5,6 @@ import { createTasksList } from "./TasksList.mjs";
 const ol = document.querySelector('#tasks-list');
 
 export function createTaskBtn() {
-  console.log('to clickandpo')
   const btn = document.querySelector('#criar-tarefa');
   btn.addEventListener('click', () => {
     const getTask = handleInputText();
@@ -38,8 +37,8 @@ export function addListenerToSaveTasks() {
       tasksToSave.push({
         taskText: task.innerHTML,
         taskClass: task.className, 
-      })
-    ));
+      }))
+    );
   
     saveToLocalStorage(tasksToSave);
   });
@@ -59,7 +58,7 @@ export function addListenerToMoveBtns() {
     if (selectedTask[checkList]) {
       selectedTask[checkList]
         .insertAdjacentElement(movement, selectedTask);
-    }
+    };
   }));
 }
 
