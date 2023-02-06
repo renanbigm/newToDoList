@@ -1,12 +1,17 @@
-import * as crypto from 'node:crypto';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
+import { modelCreate, modelFindAll } from '../models/tasksModels.mjs';
 
-const folderPath = path.resolve(process.cwd(), 'backEnd', 'db', 'migrations');
+export async function serviceCreate(body) {
+  const req = JSON.parse(body);
+  const { status, id } = await modelCreate(req);
+  if (id && req.task) {
+    return { status, id };
+  };
+  return { status: 400, message: 'Bad Request' };
+};
 
-export async function createTask(body) {
-  const id = crypto.randomUUID();
-  fs.writeFileSync(path.join(folderPath, `${id}.json`), JSON.stringify({ id, ...body }));
-  
-  return {status: 201, id};
+export async function serviceFindAll() {
+  const { status, allTasks } = await modelFindAll();
+  if (allTasks.length) return { status, allTasks };
+
+  return { status: 204, message: 'No content'};
 };

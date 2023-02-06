@@ -1,35 +1,47 @@
-import { createTask } from "../service/tasksService.mjs";
+import { serviceCreate, serviceFindAll } from "../service/tasksService.mjs";
 
-export const create = async (req, res) => {    
+export async function create(req, res) {    
   let buffer = '';
-  return new Promise((resolve, _reject) => {
+  return new Promise((resolve, reject) => {
     req.on('data', (chunk) => {
         buffer += chunk;
       });
-    req.on('end', (chunk) => {
+    req.on('end', async (chunk) => {
       if (chunk) {
         buffer += chunk;
       }
-      createTask(JSON.parse(buffer)).then(() => {
-        res.statusCode = 201;
+      const result = await serviceCreate(buffer);
+      if (result.status === 201) {
+        res.statusCode = result.status;
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
         res.write(JSON.stringify(buffer));
         res.end();
         resolve();
-      });
+      }        
+      res.statusCode = result.status;
+      reject(result.message);
     });
   });
 };
 
-export const findAll = (_req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
-  res.end('chamou get');
+export async function findAll(_req, res) {
+  return new Promise(async (resolve, reject) => {
+    const result = await serviceFindAll();
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
+    if (result.status === 200) {
+      res.statusCode = result.status;
+      res.write(JSON.stringify(result.allTasks));
+      res.end();
+      resolve();
+    };
+    res.statusCode = result.status;
+    reject(result.message);
+  });
 }
 
-export const options = (_req, res) => {
+export async function options(_req, res) {
   res.statusCode = 204;
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5500');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
@@ -37,36 +49,3 @@ export const options = (_req, res) => {
   res.setHeader('Access-Control-Max-Age', 86400);
   res.end();
 };
-
-// server.on('request', (req, res) => {
-  // console.log(http.METHODS);
-  // console.log(req.headers)
-  // const path = url.parse(req.url, true); // path.pathname, path.search, path.query
-  // const decoder = new StringDecoder('utf-8');
-  // let buffer = '';
-  
-  // req.on('data', (chunk) => {
-  //     // console.log('data --->', chunk);
-  //     // console.log('decoded --->', buffer += chunk);
-  //     buffer += chunk;
-  //   });
-
-  //   req.on('end', (chunk) => {
-  //     // console.log(req.body);
-  //     console.log(req.method);
-  //     console.log(chunk);
-  //     if (chunk) {
-  //       buffer += chunk;
-  //     }
-  //     res.writeHead(200, 'ok');
-  //     res.write(buffer);
-
-  //     res.end('its done');
-  //   });
-    
-    // res.writeHead(200, 'OK');
-    // console.log(req.url);
-  // console.log(util.inspect(path.query));
-  // res.write(util.inspect(path.query));
-  // res.end('Done');
-// });

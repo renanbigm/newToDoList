@@ -1,6 +1,6 @@
-import { create } from "../controller/TasksController.mjs";
+import { create, options, findAll } from "../controller/TasksController.mjs";
 
-const tasksRouter = async (req, res) => {
+async function tasksRouter(req, res) {
   switch (req.method) {
     case 'POST':
       await create(req, res);
@@ -14,15 +14,14 @@ const tasksRouter = async (req, res) => {
     // case 'DELETE':
     //   console.log('delete');
     //   break;
-    // case 'OPTIONS':
-    //   options(req, res);
-    //   break;
+    case 'OPTIONS':
+      options(req, res);
+      break;
     default:
       break;
-  }
-
+  };
   res.statusCode = 200;
   res.end();
-}
+};
 
 export default tasksRouter;

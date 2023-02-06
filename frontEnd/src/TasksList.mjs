@@ -3,14 +3,17 @@ import { loadFromLocalStorage } from "./helpers/handleLocalStorage.mjs";
 export async function createTasksList(text) {
   const ol = document.querySelector('#tasks-list');
   const li = document.createElement('li');
- 
+
+  // const getTasks = await fetch(`http://localhost:3336/tasks`, { method: 'GET' }).then((res) => res.json());
+  // console.log(getTasks);
+
   li.classList.add('tasks');
   li.innerHTML = text;
   li.addEventListener('click', handleTaskClick)
   li.addEventListener('dblclick', handleDblClickTasks)
   
   ol.appendChild(li);
-  // sendTasktoBE(li);
+  sendTasktoBE(li);
   return li;
 }
 
@@ -37,7 +40,7 @@ export function loadTaskList() {
   }
 }
 
-async function sendTasktoBE(task) {
+export async function sendTasktoBE(task) {
   console.log(JSON.stringify({ task: task.innerHTML }));
   const info = {
     headers: {
@@ -48,5 +51,5 @@ async function sendTasktoBE(task) {
   };
 
   const response = await fetch(`http://localhost:3336/tasks`, info).then((res) => res.json());
-  createTasksList(response.task);
+  // createTasksList(response.task);
 }
