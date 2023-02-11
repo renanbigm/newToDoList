@@ -64,7 +64,9 @@ export function addListenerToMoveBtns() {
 
 export function addListenerToClearSelectetds() {
   const clearSelecteds = document.querySelector('#del-selected');
-  clearSelecteds.addEventListener('click', function clearSelectedBtn() {
+  clearSelecteds.addEventListener('click', async function clearSelectedBtn() {
+    const target = await fetch(`http://localhost:3336/tasks/59f34d29-b965-4b0c-b9f4-cf459d76e70b`, { method: 'DELETE' }).then((res) => res.json());
+    console.log(target)
     const selectedTask = document.querySelector('.selected');
     if (!selectedTask) return;
     ol.removeChild(selectedTask);

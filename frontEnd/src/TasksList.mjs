@@ -2,19 +2,31 @@ import { loadFromLocalStorage } from "./helpers/handleLocalStorage.mjs";
 
 export async function createTasksList(text) {
   const ol = document.querySelector('#tasks-list');
-  const li = document.createElement('li');
 
-  // const getTasks = await fetch(`http://localhost:3336/tasks`, { method: 'GET' }).then((res) => res.json());
-  // console.log(getTasks);
-
-  li.classList.add('tasks');
-  li.innerHTML = text;
-  li.addEventListener('click', handleTaskClick)
-  li.addEventListener('dblclick', handleDblClickTasks)
+  if (text) {
+    await sendTasktoBE(text);
+  }
   
-  ol.appendChild(li);
-  sendTasktoBE(li);
-  return li;
+  const getTasks = await fetch(`http://localhost:3336/tasks`, { method: 'GET' }).then((res) => res.json());
+  console.log(getTasks);
+  
+  getTasks.forEach(({ id, index, task }) => {
+    const li = document.createElement('li');
+    li.classList.add('tasks');
+    li.innerHTML = task;
+    li.id = id;
+    li.name = index;
+    li.addEventListener('click', handleTaskClick);
+    li.addEventListener('dblclick', handleDblClickTasks);
+    ol.appendChild(li);
+  });
+  // li.classList.add('tasks');
+  // li.innerHTML = text;
+  // li.addEventListener('click', handleTaskClick);
+  // li.addEventListener('dblclick', handleDblClickTasks);
+  
+  // ol.appendChild(li);
+  // sendTasktoBE(li);
 }
 
 function handleTaskClick(e) {
@@ -28,17 +40,18 @@ function handleTaskClick(e) {
 function handleDblClickTasks(e) {
   const target = e.target;
   target.classList.toggle('completed');
+  console.log(target);
 }
 
-export function loadTaskList() {
-  const getTasks = loadFromLocalStorage();
-  if (getTasks) {
-    getTasks.forEach((task) => {
-      const newList = createTasksList(task.taskText);
-      newList.className = task.taskClass;
-    })
-  }
-}
+// export function loadTaskList() {
+//   const getTasks = loadFromLocalStorage();
+//   if (getTasks) {
+//     getTasks.forEach((task) => {
+//       const newList = createTasksList(task.taskText);
+//       newList.className = task.taskClass;
+//     })
+//   }
+// }
 
 export async function sendTasktoBE(task) {
   console.log(JSON.stringify({ task: task.innerHTML }));

@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 const folderPath = path.resolve(process.cwd(), 'db', 'migrations');
+const getFiles = fs.readdirSync(folderPath);
 
 export async function modelCreate(body) {
   const id = crypto.randomUUID();
@@ -12,8 +13,6 @@ export async function modelCreate(body) {
 };
 
 export async function modelFindAll() {
-  const getFiles = fs.readdirSync(folderPath);
-  
   const allTasks = getFiles.map((task, index) => {
     const file = path.join(folderPath, task);
     const readFile = fs.readFileSync(file, 'utf8');
@@ -24,5 +23,17 @@ export async function modelFindAll() {
       id: JSON.parse(readFile).id
     };
   });
-  return { status: 200, allTasks };
+  return { status: 302, allTasks };
 };
+
+export async function modelDeleteById(id) {
+  const findTarget = getFiles.find((task) => {
+    const file = path.join(folderPath, task);
+    const readFile = fs.readFileSync(file, 'utf8');
+
+    return JSON.parse(readFile).id === id;
+  });
+  fs.unlinkSync(path.join(folderPath, `${id}.json`));
+  
+  return findTarget;
+}

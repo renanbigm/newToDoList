@@ -6,10 +6,11 @@ import { addListenerToClearAll,
   createTaskBtn 
 } from "./src/Buttons.mjs";
 
-import { loadTaskList } from "./src/TasksList.mjs";
+import { createTasksList } from "./src/TasksList.mjs";
 
 window.onload = () => {
   // loadTaskList();
+  createTasksList();
   createTaskBtn();
   addListenerToClearAll();
   addListenerToClearCompletedTasks();

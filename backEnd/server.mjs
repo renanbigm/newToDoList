@@ -5,8 +5,12 @@ export const port = 3336;
 const server = http.createServer();
 
 server.on('request', async (req, res) => {
-  await tasksRouter(req, res);
-  res.end();
+  // try {
+    await tasksRouter(req, res);
+    res.end();
+  // } catch (e) {
+  //   throw new Error(e);
+  // };
 });
 
 server.listen(port, () => {

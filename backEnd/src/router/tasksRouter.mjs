@@ -1,4 +1,4 @@
-import { create, options, findAll } from "../controller/TasksController.mjs";
+import { create, options, findAll, deleteById } from "../controller/TasksController.mjs";
 
 async function tasksRouter(req, res) {
   switch (req.method) {
@@ -11,9 +11,9 @@ async function tasksRouter(req, res) {
     // case 'PUT':
     //   console.log('put');
     //   break;
-    // case 'DELETE':
-    //   console.log('delete');
-    //   break;
+    case 'DELETE':
+      await deleteById(req, res);
+      break;
     case 'OPTIONS':
       options(req, res);
       break;
