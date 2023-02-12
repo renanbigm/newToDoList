@@ -1,33 +1,38 @@
-import { loadFromLocalStorage } from "./helpers/handleLocalStorage.mjs";
+import { getRequest, postRequest, putRequest } from "./utils/requests.mjs";
+
+const ol = document.querySelector('.tasks-list');
 
 export async function createTasksList(text) {
-  const ol = document.querySelector('#tasks-list');
+  const { position, id } = await postRequest(text);
 
-  if (text) {
-    await sendTasktoBE(text);
-  }
-  
-  const getTasks = await fetch(`http://localhost:3336/tasks`, { method: 'GET' }).then((res) => res.json());
-  console.log(getTasks);
-  
-  getTasks.forEach(({ id, index, task }) => {
+  const li = document.createElement('li');
+  li.innerHTML = text;
+  li.className = 'tasks';
+  li.id = id;
+  li.name = position;
+  li.addEventListener('click', handleTaskClick);
+  li.addEventListener('dblclick', handleDblClickTasks);
+  ol.appendChild(li);
+};
+
+export async function buildAllTasks() {
+  const getTasks = await getRequest();
+
+  getTasks.forEach((task) => {
     const li = document.createElement('li');
     li.classList.add('tasks');
-    li.innerHTML = task;
-    li.id = id;
-    li.name = index;
+    if (task.class) {
+      li.className = task.class;
+    };
+
+    li.innerHTML = task.task;
+    li.id = task.id;
+    li.name = task.index;
     li.addEventListener('click', handleTaskClick);
     li.addEventListener('dblclick', handleDblClickTasks);
     ol.appendChild(li);
   });
-  // li.classList.add('tasks');
-  // li.innerHTML = text;
-  // li.addEventListener('click', handleTaskClick);
-  // li.addEventListener('dblclick', handleDblClickTasks);
-  
-  // ol.appendChild(li);
-  // sendTasktoBE(li);
-}
+};
 
 function handleTaskClick(e) {
   const tasksList = document.querySelectorAll('.tasks');
@@ -35,34 +40,12 @@ function handleTaskClick(e) {
 
   const target = e.target;
   target.classList.add('selected');
-}
+};
 
-function handleDblClickTasks(e) {
+async function handleDblClickTasks(e) {
   const target = e.target;
   target.classList.toggle('completed');
-  console.log(target);
-}
+  const classWithoutSelected = target.className.split('selected').join('');
 
-// export function loadTaskList() {
-//   const getTasks = loadFromLocalStorage();
-//   if (getTasks) {
-//     getTasks.forEach((task) => {
-//       const newList = createTasksList(task.taskText);
-//       newList.className = task.taskClass;
-//     })
-//   }
-// }
-
-export async function sendTasktoBE(task) {
-  console.log(JSON.stringify({ task: task.innerHTML }));
-  const info = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({ task: task.innerHTML }),
-  };
-
-  const response = await fetch(`http://localhost:3336/tasks`, info).then((res) => res.json());
-  // createTasksList(response.task);
-}
+  await putRequest(target.id, classWithoutSelected);
+};
