@@ -2,35 +2,32 @@ import { getRequest, postRequest, putRequest } from "./utils/requests.mjs";
 
 const ol = document.querySelector('.tasks-list');
 
-export async function createTasksList(text) {
-  const { position, id } = await postRequest(text);
-
+function liFactory(task, id, position) {
   const li = document.createElement('li');
-  li.innerHTML = text;
+  li.innerHTML = task;
   li.className = 'tasks';
   li.id = id;
   li.name = position;
   li.addEventListener('click', handleTaskClick);
   li.addEventListener('dblclick', handleDblClickTasks);
   ol.appendChild(li);
+  
+  return li;
+}
+
+export async function createTasksList(text) {
+  const { position, id } = await postRequest(text);
+  liFactory(text, id, position);
 };
 
 export async function buildAllTasks() {
   const getTasks = await getRequest();
 
   getTasks.forEach((task) => {
-    const li = document.createElement('li');
-    li.classList.add('tasks');
+    const buildLi = liFactory(task.task, task.id, task.index);
     if (task.class) {
-      li.className = task.class;
+      buildLi.className = task.class;
     };
-
-    li.innerHTML = task.task;
-    li.id = task.id;
-    li.name = task.index;
-    li.addEventListener('click', handleTaskClick);
-    li.addEventListener('dblclick', handleDblClickTasks);
-    ol.appendChild(li);
   });
 };
 
