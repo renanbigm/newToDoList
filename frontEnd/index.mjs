@@ -1,24 +1,20 @@
-import { addListenerToClearSelecteds, createTaskBtn } from "./src/Buttons.mjs";
-import { buildAllTasks } from "./src/TasksList.mjs";
+import { addListenerToClearSelecteds } from "./src/Buttons.mjs";
+import { buildAllTasks, createTasksList } from "./src/TasksList.mjs";
 
-export const handleInputText = () => {
-  const inputValue = document.querySelector('.add-task');
-  const btnCreateTask = document.querySelector('.criar-tarefa');
+const form = document.querySelector('#task-form');
 
-  inputValue.addEventListener('keypress', function (event) {
-    if (event.keyCode === 13) { 
-      btnCreateTask.click();
-    }
-  });
-  const text = inputValue.value;
-  inputValue.value = '';
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
 
-  return text;
-}
+  const textInput = document.querySelector('.add-task');
+  if (!textInput.value) return alert("A tarefa precisa ser descrita.");
 
-window.onload = async () => {
-  await buildAllTasks();
-  createTaskBtn();
-  handleInputText();
+  createTasksList(textInput.value);
+  textInput.value = '';
+});
+
+
+window.onload = () => {
+  buildAllTasks();
   addListenerToClearSelecteds();
 }
